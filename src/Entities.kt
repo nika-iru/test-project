@@ -1,8 +1,7 @@
 import java.util.Scanner
 
-// Grid class to manage tiles
 class Grid(val name: String) {
-    private var grid: ArrayList<Tile> = ArrayList()
+    private val grid: ArrayList<Tile> = ArrayList()
 
     init {
         for (i in 0 until 10) {
@@ -39,8 +38,7 @@ class Grid(val name: String) {
 
     fun markOccupied(coords: List<Pair<Int, Int>>) {
         coords.forEach { coord ->
-            val tile = grid.firstOrNull { it.coord == coord }
-            tile?.state = TileState.SHIP
+            grid.firstOrNull { it.coord == coord }?.state = TileState.SHIP
         }
     }
 
@@ -79,27 +77,21 @@ class MainShip(var orientation: Orientation, var length: Int = 3) {
 class Player(val name: String, val grid: Grid, val ship: MainShip) {
     fun placeMainShip(leadTile: Tile): Boolean {
         val tempList = mutableListOf<Pair<Int, Int>>()
-
         if (ship.orientation == Orientation.VERTICAL) {
             for (i in 0 until ship.length) {
                 val y = leadTile.coord.second + i
                 if (y < 10 && grid.getTile(leadTile.coord.first, y)?.state == TileState.UNKNOWN) {
                     tempList.add(leadTile.coord.first to y)
-                } else {
-                    return false
-                }
+                } else return false
             }
         } else {
             for (i in 0 until ship.length) {
                 val x = leadTile.coord.first + i
                 if (x < 10 && grid.getTile(x, leadTile.coord.second)?.state == TileState.UNKNOWN) {
                     tempList.add(x to leadTile.coord.second)
-                } else {
-                    return false
-                }
+                } else return false
             }
         }
-
         ship.coords = tempList
         grid.markOccupied(tempList)
         return true
@@ -125,14 +117,5 @@ class Player(val name: String, val grid: Grid, val ship: MainShip) {
     }
 }
 
-enum class TileState {
-    UNKNOWN,
-    MISS,
-    HIT,
-    SHIP
-}
-
-enum class Orientation {
-    HORIZONTAL,
-    VERTICAL
-}
+enum class TileState { UNKNOWN, MISS, HIT, SHIP }
+enum class Orientation { HORIZONTAL, VERTICAL }

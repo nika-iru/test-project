@@ -1,4 +1,5 @@
 import java.util.Scanner
+import kotlin.system.exitProcess
 
 // ANSI color codes for console output
 const val RESET = "\u001B[0m"
@@ -48,23 +49,15 @@ fun main() {
     }
 }
 
-// Function to let a player place their ship
 fun placeShip(scanner: Scanner, player: Player) {
     var placed = false
     while (!placed) {
         println("${player.name}, enter the starting X (0-9):")
         val x = scanner.nextInt()
-
         println("${player.name}, enter the starting Y (0-9):")
         val y = scanner.nextInt()
-
         println("${player.name}, choose orientation (H for Horizontal, V for Vertical):")
-        val orientationInput = scanner.next()
-        val orientation = if (orientationInput.equals("H", ignoreCase = true))
-            Orientation.HORIZONTAL
-        else
-            Orientation.VERTICAL
-
+        val orientation = if (scanner.next().equals("H", ignoreCase = true)) Orientation.HORIZONTAL else Orientation.VERTICAL
         player.ship.orientation = orientation
 
         val tile = player.grid.getTile(x, y)
